@@ -1,0 +1,23 @@
+https://www.raspberrypi.org/forums/viewtopic.php?t=188448&start=200
+https://www.raspberrypi.org/forums/viewtopic.php?f=54&t=188448&sid=e8e8271939f9d5d62cd70592d3865e61&start=200
+
+
+If you'd like to upgrade early, ensure your Pi has network connectivity then:
+
+demouser@pi64 ~ $ sudo emaint sync --repo sakaki-tools
+demouser@pi64 ~ $ sudo emerge -v --update --oneshot app-portage/genup
+demouser@pi64 ~ $ sudo genup
+
+This will update your kernels, boot firmware and all affected userland packages (approximately 200 or so). Let it run to completion - although it will use binary packages from the binhost for almost all upgrades, it will still require three or so hours for everything.
+
+Once finished (you see the message "All done - your system is now up to date!"), reboot, to start using the new kernel. Once back up, open a console and then issue:
+
+demouser@pi64 ~ $ sudo dispatch-conf
+
+Once you have completed the config file updates, reboot once more, and you should be at v1.5.1! You can check by issuing:
+
+demouser@pi64 ~ $ eix rpi-64bit-meta
+
+
+
+aleksanderadasu

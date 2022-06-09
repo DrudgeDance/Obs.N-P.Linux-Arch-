@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head></head>
+    <body class="feature-filter-bar feature-upvotes tutorials-controller tutorial-single" data-env="production" data-prefix="/community" data-user-id="" data-facebook-app-id="694818843983011" data-completed-tutorial-id="" data-tutorial-id="1943" data-js="tutorial">
+        <div class='outside_viewport'>
+            <div id="contents-modal" class="hidden" role="dialog" aria-labelledby="contents-modal-title" aria-modal='true'>
+                <div class='mini-dialog-panel'>
+                    <div class='dialog-body'>
+                        <div class="table-of-contents-modal"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-of-contents">
+                <div data-js="tableOfContentsDesktop"></div>
+            </div>
+            <div id='share-modal' class="hidden" role="dialog" aria-labelledby="share-modal-title" aria-modal='true'>
+                <div class='mini-dialog-panel'>
+</div>
+            </div>
+            <!-- algolia universal search -->
+            <input type="hidden" id="q-universal-search" value=""/>
+            <div id='share-modal' class="hidden" role="dialog" aria-labelledby="share-modal-title" aria-modal='true'>
+                <div class='mini-dialog-panel'>
+</div>
+            </div>
+            <div id="newsletter-signup-dialog" class="newsletter-signups-dialog" data-newsletter-signup-dialog data-article-target=".content-body">
+</div>
+        </div>
+        <div style="display: none;">
+</div>
+        <nav class="navbar" role="navigation" aria-label="Navigation" data-js="global-navbar">
+            <ul role="menubar" class="utility">
+</ul>
+            <ul role="menubar" class="primary">
+</ul>
+        </nav>
+        <header> </header>
+        <div class='wrapper layout-wrapper'>
+            <div class="section-content section-content-growable content Tutorial-content content-has-mobile-image">
+                <div class="container tutorial-header">
+                    <div class="featured-content-header">
+                        <span class="featured-items-right-bar-container"></span>
+                    </div>
+                    <h1 class="content-title Tutorial-header">How to Install and Configure VNC on Ubuntu 16.04</h1>
+                    <span class="meta-section tags"> </span>
+                </div>
+                <div class="content-body tutorial-content" data-growable-markdown>
+                    <h3 id="introduction">Introduction</h3>
+                    <p>VNC, or &ldquo;Virtual Network Computing&rdquo;, is a connection system that allows you to use your keyboard and mouse to interact with a graphical desktop environment on a remote server. It makes managing files, software, and settings on
+          a remote server easier for users who are not yet comfortable with the command line.</p>
+                    <p>In this guide, we will be setting up VNC on an Ubuntu 16.04 server and connecting to it securely through an SSH tunnel. The VNC server we will be using is TightVNC, a fast and lightweight remote control package. This choice will ensure
+          that our VNC connection will be smooth and stable even on slower internet connections.</p>
+                    <h2 id="prerequisites">Prerequisites</h2>
+                    <p>To complete this tutorial, you&rsquo;ll need:</p>
+                    <ul>
+                        <li>
+                            <p>An Ubuntu 16.04 Droplet set up via the <a href="https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-16-04">Ubuntu 16.04 initial server setup tutorial</a>, which includes having a sudo non-root user. Note
+              that this tutorial can be completed using any size Droplet, but a VNC built on a smaller droplet may have more limits on functionality than a larger one.</p>
+                        </li>
+                        <li>
+                            <p>A local computer with a VNC client installed that supports VNC connections over SSH tunnels. If you are using Windows, you could use TightVNC, RealVNC, or UltraVNC. Mac OS X users can use the built-in Screen Sharing program, or can use
+              a cross-platform app like RealVNC. Linux users can choose from many options: <code>vinagre</code>, <code>krdc</code>, RealVNC, TightVNC, and more.</p>
+                        </li>
+                    </ul>
+                    <h2 id="step-1-—-installing-the-desktop-environment-and-vnc-server">Step 1 — Installing the Desktop Environment and VNC Server</h2>
+                    <p>By default, an Ubuntu 16.04 Droplet does not come with a graphical desktop environment or a VNC server installed, so we&rsquo;ll begin by installing those. Specifically, we will install packages for the latest Xfce desktop environment and
+          the TightVNC package available in the official Ubuntu repository.</p>
+                    <p>On your server, install the Xfce and TightVNC packages.</p>
+                    <pre class="code-pre command prefixed"><code class="code-highlight language-bash"><ul class="prefixed">
+                                <li class="line" data-prefix="$">sudo apt-get update
+</li>
+                                <li class="line" data-prefix="$">sudo apt install xfce4 xfce4-goodies tightvncserver
+</li>
+                            </ul></code></pre>
+                    <p>To complete the VNC server&rsquo;s initial configuration after installation, use the <code>vncserver</code> command to set up a secure password.</p>
+                    <pre class="code-pre command prefixed"><code class="code-highlight language-bash"><ul class="prefixed">
+                                <li class="line" data-prefix="$">vncserver
+</li>
+                            </ul></code></pre>
+                    <p>You&rsquo;ll be prompted to enter and verify a password, and also a view-only password. Users who log in with the view-only password will not be able to control the VNC instance with their mouse or keyboard. This is a helpful option if you
+          want to demonstrate something to other people using your VNC server, but isn&rsquo;t necessary.</p>
+                    <p>Running <code>vncserver</code> completes the installation of VNC by creating default configuration files and connection information for our server to use. With these packages installed, you are now ready to configure your VNC server.</p>
+                    <h2 id="step-2-—-configuring-the-vnc-server">Step 2 — Configuring the VNC Server</h2>
+                    <p>First, we need to tell our VNC server what commands to perform when it starts up. These commands are located in a configuration file called <code>xstartup</code> in the <code>.vnc</code> folder under your home directory. The startup script
+          was created when you ran the <code>vncserver</code> in the previous step, but we need modify some of the commands for the Xfce desktop.</p>
+                    <p>When VNC is first set up, it launches a default server instance on port 5901. This port is called a display port, and is referred to by VNC as <code>:1</code>. VNC can launch multiple instances on other display ports, like <code>:2</code>, <code>:3</code>, etc. When working with VNC servers, remember that <code>:X</code> is a display port that refers to <code>5900+X</code>. </p>
+                    <p>Because we are going to be changing how the VNC server is configured, we&rsquo;ll need to first stop the VNC server instance that is running on port 5901.</p>
+                    <pre class="code-pre command prefixed"><code class="code-highlight language-bash"><ul class="prefixed">
+                                <li class="line" data-prefix="$">vncserver -kill :1
+</li>
+                            </ul></code></pre>
+                    <p>The output should look like this, with a different PID:</p>
+                    <pre class="code-pre "><code><div class="secondary-code-label " title="Output">Output</div>Killing Xtightvnc process ID 17648</code></pre>
+                    <p>Before we begin configuring the new <code>xstartup</code> file, let&rsquo;s back up the original.</p>
+                    <pre class="code-pre command prefixed"><code class="code-highlight language-bash"><ul class="prefixed">
+                                <li class="line" data-prefix="$">mv ~/.vnc/xstartup ~/.vnc/xstartup.bak
+</li>
+                            </ul></code></pre>
+                    <p>Now create a new <code>xstartup</code> file with <code>nano</code> or your favorite text editor.</p>
+                    <pre class="code-pre command prefixed"><code class="code-highlight language-bash"><ul class="prefixed">
+                                <li class="line" data-prefix="$">nano ~/.vnc/xstartup
+</li>
+                            </ul></code></pre>
+                    <p>Paste these commands into the file so that they are performed automatically whenever you start or restart the VNC server, then save and close the file.</p>
+                    <pre class="code-pre "><code><div class="secondary-code-label " title="~/.vnc/xstartup">~/.vnc/xstartup</div>#!/bin/bash
+xrdb $HOME/.Xresources
+startxfce4 &amp;</code></pre>
+                    <p>The first command in the file, <code>xrdb $HOME/.Xresources</code>, tells VNC&rsquo;s GUI framework to read the server user&rsquo;s <code>.Xresources</code> file. <code>.Xresources</code> is where a user can make changes to certain
+          settings of the graphical desktop, like terminal colors, cursor themes, and font rendering. The second command simply tells the server to launch Xfce, which is where you will find all of the graphical software that you need to comfortably
+          manage your server.</p>
+                    <p>To ensure that the VNC server will be able to use this new startup file properly, we&rsquo;ll need to grant executable privileges to it.</p>
+                    <pre class="code-pre command prefixed"><code class="code-highlight language-bash"><ul class="prefixed">
+                                <li class="line" data-prefix="$">sudo chmod +x ~/.vnc/xstartup
+</li>
+                            </ul></code></pre>
+                    <p>Now, restart the VNC server.</p>
+                    <pre class="code-pre command prefixed"><code class="code-highlight language-bash"><ul class="prefixed">
+                                <li class="line" data-prefix="$">vncserver
+</li>
+                            </ul></code></pre>
+                    <p>The server should be started with an output similar to this:</p>
+                    <pre class="code-pre "><code><div class="secondary-code-label " title="Output">Output</div>New 'X' desktop is your_server_name.com:1
+Starting applications specified in /home/sammy/.vnc/xstartup
+Log file is /home/sammy/.vnc/liniverse.com:1.log</code></pre>
+                    <h2 id="step-3-—-testing-the-vnc-desktop">Step 3 — Testing the VNC Desktop</h2>
+                    <p>In this step, we&rsquo;ll test the connectivity of your VNC server.</p>
+                    <p>First, we need to create an SSH connection on your local computer that securely forwards to the <code>localhost</code> connection for VNC. You can do this via the terminal on Linux or OS X with following command. Remember to replace <code><span class="highlight">user</span></code> and <code><span class="highlight">server_ip_address</span></code> with the sudo non-root username and IP address of your server. </p>
+                    <pre class="code-pre command prefixed"><code class="code-highlight language-bash"><ul class="prefixed">
+                                <li class="line" data-prefix="$">ssh -L 5901:127.0.0.1:5901 -N -f -l
+                                    <span class="highlight">username</span>
+                                    <span class="highlight">server_ip_address</span>
+                                </li>
+                            </ul></code></pre>
+                    <p>If you are using a graphical SSH client, like PuTTY, use <code><span class="highlight">server_ip_address</span></code> as the connection IP, and set <code>localhost:5901</code> as a new forwarded port in the program&rsquo;s SSH tunnel
+          settings.</p>
+                    <p>Next, you may now use a VNC client to attempt a connection to the VNC server at <code>localhost:5901</code>. You&rsquo;ll be prompted to authenticate. The correct password to use is the one you set in Step 1.</p>
+                    <p>Once you are connected, you should see the default Xfce desktop. It should look something like this:</p>
+                    <p><img src="http://i.imgur.com/X4eEcuV.png" alt="VNC connection to Ubuntu 16.04 server"></p>
+                    <p>You can access files in your home directory with the file manager or from the command line, as seen here:</p>
+                    <p><img src="http://i.imgur.com/n5VPuSa.png" alt="Files via VNC connection to Ubuntu 16.04"></p>
+                    <h2 id="step-4-—-creating-a-vnc-service-file">Step 4 — Creating a VNC Service File</h2>
+                    <p>Next, we&rsquo;ll set up the VNC server as a systemd service. This will make it possible to start, stop, and restart it as needed, like any other systemd service.</p>
+                    <p>First, create a new unit file called <code>/etc/systemd/system/vncserver@.service</code> using your favorite text editor:</p>
+                    <pre class="code-pre command prefixed"><code class="code-highlight language-bash"><ul class="prefixed">
+                                <li class="line" data-prefix="$">sudo nano /etc/systemd/system/vncserver@.service
+</li>
+                            </ul></code></pre>
+                    <p>Copy and paste the following into it. Be sure to change the value of <strong>User</strong> and the username in the value of <strong>PIDFILE</strong> to match your username.</p>
+                    <pre class="code-pre "><code><div class="secondary-code-label " title="/etc/systemd/system/vncserver@.service ">/etc/systemd/system/vncserver@.service </div>[Unit]
+Description=Start TightVNC server at startup
+After=syslog.target network.target
+[Service]
+Type=forking
+User=<span class="highlight">sammy</span>
+PAMName=login
+PIDFile=/home/<span class="highlight">sammy</span>/.vnc/%H:%i.pid
+ExecStartPre=-/usr/bin/vncserver -kill :%i &gt; /dev/null 2&gt;&amp;1
+ExecStart=/usr/bin/vncserver -depth 24 -geometry 1280x800 :%i
+ExecStop=/usr/bin/vncserver -kill :%i
+[Install]
+WantedBy=multi-user.target</code></pre>
+                    <p>Save and close the file.</p>
+                    <p>Next, make the system aware of the new unit file.</p>
+                    <pre class="code-pre command prefixed"><code class="code-highlight language-bash"><ul class="prefixed">
+                                <li class="line" data-prefix="$">sudo systemctl daemon-reload
+</li>
+                            </ul></code></pre>
+                    <p>Enable the unit file.</p>
+                    <pre class="code-pre command prefixed"><code class="code-highlight language-bash"><ul class="prefixed">
+                                <li class="line" data-prefix="$">sudo systemctl enable vncserver@1.service
+</li>
+                            </ul></code></pre>
+                    <p>The <code>1</code> following the <code>@</code> sign signifies which display number the service should appear over, in this case the default <code>:1</code> as was discussed above. <br>
+          Stop the current instance of the VNC server if it&rsquo;s still running.</p>
+                    <pre class="code-pre command prefixed"><code class="code-highlight language-bash"><ul class="prefixed">
+                                <li class="line" data-prefix="$">vncserver -kill :1
+</li>
+                            </ul></code></pre>
+                    <p>Then start it as you would start any other systemd service.</p>
+                    <pre class="code-pre command prefixed"><code class="code-highlight language-bash"><ul class="prefixed">
+                                <li class="line" data-prefix="$">sudo systemctl start vncserver@1
+</li>
+                            </ul></code></pre>
+                    <p>You can verify that it started with this command:</p>
+                    <pre class="code-pre command prefixed"><code class="code-highlight language-bash"><ul class="prefixed">
+                                <li class="line" data-prefix="$">sudo systemctl status vncserver@1
+</li>
+                            </ul></code></pre>
+                    <p>If it started correctly, the output should look like this:</p>
+                    <div class="code-label " title="Output">Output</div>
+                    <pre class="code-pre "><code class="code-highlight language-bash">vncserver@1.service - TightVNC server on Ubuntu 16.04
+   Loaded: loaded (/etc/systemd/system/vncserver@.service; enabled; vendor preset: enabled) <span class="highlight">Active: active (running)</span> since Mon 2016-04-25 03:21:34 EDT; 6s ago
+  Process: 2924 ExecStop=/usr/bin/vncserver -kill :%i (code=exited, status=0/SUCCESS)
+...
+ systemd[1]: Starting TightVNC server on Ubuntu 16.04...
+ systemd[2938]: pam_unix(login:session): session opened for user finid by (uid=0)
+ systemd[2949]: pam_unix(login:session): session opened for user finid by (uid=0)
+ systemd[1]: Started TightVNC server on Ubuntu 16.04.</code></pre>
+                    <h2 id="conclusion">Conclusion</h2>
+                    <p>You should now have a secured VNC server up and running on your Ubuntu 16.04 server. Now you&rsquo;ll be able to manage your files, software, and settings with an easy-to-use and familiar graphical interface.</p>
+                </div>                 
+            </div>
+            <div class="tutorial-footer">
+                <div class='tutorial-footer-details'>
+                    <span class="helpfulness_and_share_box"></span>
+                    <div class="component-collaborators-container-footer">
+                        <div class="component-collaborators-content">
+                            <div class="author">
+                                <a href="/community/users/finid"> </a>
+                            </div>
+                            <div class="editor-translator">
+                                <div class="author">
+                                    <a href="/community/users/hazelnut">  <div class="avatar">
+</div>  </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='looking-for-an-answer'>
+</div>
+                <div class="featured-content-footer">
+                    <span class="featured-items-right-bar-container"></span>
+                </div>
+            </div>
+            <div class="tabs">
+                <ul>
+</ul>
+            </div>
+            <div id="comments-tab" style="display:block">
+                <div class="content-comments">
+</div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <footer>
+            <section class="dark">
+</section>
+        </footer>
+        <div id='sign-in-modal' class="hidden" role="dialog" aria-labelledby="sign-in-modal-title" aria-modal='true'>
+            <div class='mini-dialog-panel'>
+                <div class='dialog-body text-center'>
+</div>
+            </div>
+        </div>
+    </body>
+</html>

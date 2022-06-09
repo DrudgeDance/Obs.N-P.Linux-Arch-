@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" data-reactroot="" data-reactid="1" data-react-checksum="357278585">
+    <head data-reactid="2">
+    </head>
+    <body data-reactid="46">
+        <div id="content" data-reactid="47">
+            <div data-iso-key="_0">
+                <div class="App  theme-light" data-reactroot="" data-reactid="1" data-react-checksum="244473111">
+                    <div class="SidePanel" data-reactid="2"></div>
+                    <div data-reactid="86">
+                        <div class="headroom-wrapper" data-reactid="87">
+                            <div style="position:relative;top:0;left:0;right:0;z-index:1;-webkit-transform:translate3D(0, 0, 0);-ms-transform:translate3D(0, 0, 0);transform:translate3D(0, 0, 0);" class="headroom headroom--unfixed" data-reactid="88">
+                                <header class="Header" data-reactid="89">
+                                    <div style="display:none;" data-reactid="90">
+                                        <div id="disabled_ad" style="display:none;" data-reactid="91"></div>
+                                    </div>
+                                    <nav class="row Header__nav" data-reactid="92">
+                                        <div class="large-1 columns show-for-large large-centered Header__sort" data-reactid="101"></div>
+                                    </nav>
+                                </header>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="App__content" data-reactid="126">
+                        <div class="Post" data-reactid="127">
+                            <div class="post-content" data-reactid="128">
+                                <div class="post-main" data-reactid="192">
+                                    <div class="row" data-reactid="193">
+                                        <div class="column" data-reactid="194">
+                                            <article class="PostFull hentry" itemscope="" itemtype="http://schema.org/Blog" data-reactid="195">
+                                                <span data-reactid="196"><div class="PostFull__header" data-reactid="197">
+                                                        <h1 class="entry-title" data-reactid="198"><!-- react-text: 199 -->How to enable auto-login in Debian 9 Xfce<!-- /react-text --><span title="Powered Up 100%" data-reactid="200"><span class="Icon steempower" style="display:inline-block;width:1.12rem;height:1.12rem;" data-reactid="201"></span></span></h1>
+                                                        <span class="PostFull__time_author_category_large vcard" data-reactid="202"></span>
+                                                    </div><div class="PostFull__body entry-content" data-reactid="227">
+                                                        <div class="MarkdownViewer Markdown" data-reactid="228">
+                                                            <div data-reactid="229">
+                                                                <p>Recently, I switched from Ubuntu to Debian 9 (stretch) xfce. It is a great distribution. But i had a small problem which i didn't have in ubuntu, That is auto login.</p>
+                                                                <p><em><strong>Note:</strong> Auto login is not recommended for security reasons, but i am enabling it for the sake of my convenience.</em></p>
+                                                                <p><img src="https://steemitimages.com/640x0/http://entornosgnulinux.com/wp-content/uploads/2017/02/lightdm-gtk-greeter.jpg" srcset="https://steemitimages.com/640x0/http://entornosgnulinux.com/wp-content/uploads/2017/02/lightdm-gtk-greeter.jpg 1x, https://steemitimages.com/1280x0/http://entornosgnulinux.com/wp-content/uploads/2017/02/lightdm-gtk-greeter.jpg 2x"/></p>
+                                                                <p>So, I did a bit search and found out that xfce uses LightDM as login manager. So, i headed up to <a href="https://wiki.debian.org/LightDM" rel="nofollow noopener" title="This link will take you away from steemit.com">debian wiki LightDM page</a>. Debian wiki is a great place, Well documented steps are available!</p>
+                                                                <p>I fired up the nano editor (you can use any text editor with root privileges) <code>sudo nano /usr/share/lightdm/lightdm.conf.d/01_debian.conf</code></p>
+                                                                <p>added these lines below</p>
+                                                                <pre><code>[SeatDefaults]
+autologin-user=username
+autologin-user-timeout=0</code></pre>
+                                                                <p>Save &amp; exit. Now autologin is enabled !</p>
+                                                            </div>
+                                                        </div>
+                                                    </div></span>
+                                                <div class="PostFull__footer row" data-reactid="235"></div>
+                                                <div class="row" data-reactid="342">
+                                                    <div class="column large-8 medium-10 small-12" data-reactid="343"></div>
+                                                </div>
+                                            </article>
+                                        </div>
+                                    </div>
+                                    <div class="row" data-reactid="344">
+                                        <div class="column" data-reactid="345">
+                                            <div style="margin:0.5rem auto 0;max-width:54rem;" data-reactid="346">
+                                                <div class="ad-carousel swiper-container" style="width:100%;height:undefinedpx;" data-reactid="347"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="#comments" class="Post_comments row hfeed" data-reactid="355">
+                                        <div class="column large-12" data-reactid="356"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-reactid="735">
+                        <span data-reactid="736"></span>
+                    </div>
+                    <div data-reactid="737">
+                        <!-- react-text: 738 -->
+                        <!-- /react-text -->
+                        <div class="notification-list" data-reactid="739"></div>
+                    </div>
+                    <!-- react-empty: 740 -->
+                </div>
+            </div>
+        </div>
+        <script src="/assets/vendor.8c03d203ec64a57ca7b6.js" data-reactid="48"></script>
+        <script src="/assets/app.8c03d203ec64a57ca7b6.js" data-reactid="49"></script>
+    </body>
+</html>

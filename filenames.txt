@@ -1,0 +1,8 @@
+For 32-bit ARM:
+
+Anaconda3-20.02-Linux-armv7l.sh
+Anaconda3-20.02-Linux-aarch32.sh
+For 64-bit ARM:
+
+Anaconda3-20.02-Linux-arm64.sh
+Anaconda3-20.02-Linux-aarch64.sh
